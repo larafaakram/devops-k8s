@@ -1,3 +1,12 @@
+packer {
+  required_plugins {
+    ansible = {
+      version = ">= 1.1.1"
+      source  = "github.com/hashicorp/ansible"
+    }
+  }
+}
+
 
 source "amazon-ebs" "ubuntu" {
   ami_name      = "k8s-node"
@@ -25,4 +34,5 @@ build {
   provisioner "ansible" {
     playbook_file = "./ansible/playbook.yaml"
   }
+
 }
