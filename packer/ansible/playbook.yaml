@@ -1,6 +1,10 @@
 - name: "Provision a k8s image"
   hosts: default
   become: true
+  vars: 
+    - k8s_url_apt_key: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key"
+    - k8s_gpgpath: /usr/share/keyrings/kubernetes-apt-keyring.gpg
+    - k8s_repository: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/"
 
   tasks:
   # Kubernetes components
@@ -24,26 +28,16 @@
       enabled: yes
       state: started
   - name: Add the Kubernetes repository key
-    #shell: 
-    #  "curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg"
-    apt_key:
-      url: https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key
-      #url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-      state: present
-      #curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    shell: curl -fsSL {{ k8s_url_apt_key }} | gpg --dearmor -o {{ k8s_gpgpath }}
+    args:
+      creates: "{{ k8s_gpgpath }}"
+
   - name: Add the Kubernetes repository
-    shell:
-      "echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list"
-  #- name: Add the Kubernetes repository
-  #  apt_repository:
-  #    repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/
-  #    state: present
-  #    filename: kubernetes.list
-  #    update_cache: yes
-  #    mode: 0644
-  #    validate_certs: no
-      #repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
-      #state: present
+    apt_repository:
+      repo: "deb [signed-by={{ k8s_gpgpath }}] {{ k8s_repository }} /"
+      state: present
+      filename: kubernetes.list
+
   - name: Install the components
     apt:
       name: ["kubelet","kubeadm","kubectl"]
