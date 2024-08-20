@@ -30,11 +30,11 @@
   - name: Add the Kubernetes repository
     apt_repository:
       repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/"
-      state: present
+      #state: present
       filename: kubernetes.list
-      update_cache: yes
-      mode: 0644
-      validate_certs: no
+      #update_cache: yes
+      #mode: 0644
+      #validate_certs: no
       #repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
       #state: present
   - name: Install the components
