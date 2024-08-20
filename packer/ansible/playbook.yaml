@@ -28,13 +28,16 @@
       url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
       state: present
   - name: Add the Kubernetes repository
-    apt_repository:
-      repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/
-      #state: present
-      filename: kubernetes.list
-      #update_cache: yes
-      #mode: 0644
-      #validate_certs: no
+    shell:
+      "echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list"
+  #- name: Add the Kubernetes repository
+  #  apt_repository:
+  #    repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/
+  #    state: present
+  #    filename: kubernetes.list
+  #    update_cache: yes
+  #    mode: 0644
+  #    validate_certs: no
       #repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
       #state: present
   - name: Install the components
