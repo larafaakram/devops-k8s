@@ -29,7 +29,6 @@
       state: present
   - name: Add the Kubernetes repository
     apt_repository:
-      apt_repository:
       repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/"
       state: present
       filename: kubernetes.list
