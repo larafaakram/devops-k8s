@@ -24,10 +24,10 @@
       enabled: yes
       state: started
   - name: Add the Kubernetes repository key
-    shell: 
-      "curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg"
-    #apt_key:
-      #url: https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key
+    #shell: 
+    #  "curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg"
+    apt_key:
+      url: https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key
       #url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
       #state: present
       #curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
