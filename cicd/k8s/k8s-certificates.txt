@@ -44,6 +44,6 @@
 # Add the gitlab context
 # kubectl config set-context gitlab --cluster=$(kubectl config view -o jsonpath='{.clusters[0].name}') --namespace=staging --user=gitlab --kubeconfig=/d/LABS/DevOps-Project/devops-k8s/cicd/k8s/gitlab-config
 
-# ADD
+# ADD new file
 
 
