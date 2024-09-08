@@ -1,0 +1,38 @@
+apiVersion: kudo.dev/v1beta1
+name: "nginx-operator"
+operatorVersion: "0.2.7"
+appVersion: "1.27.1"
+kubernetesVersion: 1.30.4
+maintainers:
+  - name: Akram
+    email: larafa.akram@gmail.com
+url: https://kudo.dev
+tasks:
+  - name: app
+    kind: Apply
+    spec:
+      resources:
+        - deployment.yaml
+        - service.yaml
+        - configmap.yaml
+  - name: assets
+    kind: Pipe
+    spec:
+      pod: pipe-pod.yaml
+      pipe:
+        - file: /tmp/index.html
+          kind: ConfigMap
+          key: indexHtml
+plans:
+  deploy:
+    strategy: serial
+      phases:
+        - name: main
+          strategy: serial
+          steps:
+            - name: genfiles
+              tasks:
+                - assets
+            - name: deploy
+              tasks:
+                - app

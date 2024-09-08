@@ -1,0 +1,49 @@
+# First Step: Create a Certificate Autority for all the cluster
+
+# openssl genrsa -out ca.key 2048
+
+# openssl req -new -key ca.key -subj "/CN=KUBERNETES-CA" -out ca.csr
+
+# openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt
+
+# Second Step: generate certificate for clients {admin, Api-Server controller-Manager, schedular, ..}
+
+# openssl genrsa -out admin.key 2048
+
+# openssl req -new -key admin.key -subj "/CN=admin,O=system:masters" -out admin.csr
+
+# openssl x509 -req -in admin.csr -CA ca.crt -CAkey ca.key --out admin.crt
+
+# NOTE: for system component the name is defined like this: "/CN=system:schedular"
+
+# Test:
+
+# curl https://kube-apiserver:6443/api/v1/pods --key admin.key --cert admin.crt --cacert ca.crt
+
+# Display content of certificate:
+
+# openssl -x509 -in /etc/kubernetenes/pki/apiserver.crt -text -noout
+
+# Approve CSR and create getlab.crt
+
+# kubectl apply -f k8s-csr.yaml
+# kubectl get csr
+# kubectl certificate approve k8s-csr
+# kubectl get csr gitlab -o jsonpath="{.status.certificate}" | base64 -d > gitlab.crt
+# Export the certificate authority
+# kubectl config view -o jsonpath="{.clusters[0].cluster.certificate-authority-data}" --raw | base64 -d > k8s-ca.crt
+
+# Create kube-Config for gitlab user:
+
+# Add the cluster
+# kubectl config set-cluster $(kubectl config view -o jsonpath='{.clusters[0].name}') --server=$(kubectl config view -o jsonpath='{.clusters[0].cluster.server}') --certificate-authority=k8s-ca.crt --kubeconfig=gitlab-config --embed-certs
+
+# Add the user credentiels
+# kubectl config set-credentials gitlab --client-certificate=gitlab.crt --client-key=gitlab.key --embed-certs --kubeconfig=/d/LABS/DevOps-Project/devops-k8s/cicd/k8s/gitlab-config
+
+# Add the gitlab context
+# kubectl config set-context gitlab --cluster=$(kubectl config view -o jsonpath='{.clusters[0].name}') --namespace=staging --user=gitlab --kubeconfig=/d/LABS/DevOps-Project/devops-k8s/cicd/k8s/gitlab-config
+
+
+
+

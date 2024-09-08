@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "Shared-data"
+spec:
+  volumes:
+    - name: shared-data
+      emptyDir: {}
+
+  initContainers:
+  - name: init
+    image: "busybox"
+    command: ["/bin/sh", "-c"]
+    args:
+      - touch /tmp/index.html;
+        echo "Hello World !" > /tmp/index.html;
+      # - wget -O /tmp/index.html 'https://drive.google.com/file/d/1Xi7FTcCfMJtO0JBjIYjs7dOqy2ymHAVv/view?usp=drive_link'
+    volumeMounts:
+      - name: shared-data
+        mountPath: /tmp
