@@ -39,8 +39,9 @@ push:
     - cd ../weather
     - docker build -t $CI_REGISTRY_USER/weatherapp-weather:$CI_COMMIT_SHA .
     - docker push $CI_REGISTRY_USER/weatherapp-weather:$CI_COMMIT_SHA
-  only:
-    - main
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
   
 
   
