@@ -37,7 +37,7 @@ push:
     - cd microservices/auth
     - docker build -t $CI_REGISTRY_USER/weatherapp-auth:$CI_COMMIT_SHA . --no-cache
     - docker push $CI_REGISTRY_USER/weatherapp-auth:$CI_COMMIT_SHA
-    - docker ../UI
+    - cd ../UI
     - docker build -t $CI_REGISTRY_USER/weatherapp-ui:$CI_COMMIT_SHA .
     - docker push $CI_REGISTRY_USER/weatherapp-ui:$CI_COMMIT_SHA
     - cd ../weather
