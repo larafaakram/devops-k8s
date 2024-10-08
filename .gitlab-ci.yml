@@ -1,5 +1,6 @@
 stages:
 # My pipeline
+
   - build
   - push
 
