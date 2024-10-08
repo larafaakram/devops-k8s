@@ -31,6 +31,7 @@ push:
     - docker:dind
   before_script:
     - echo "192.168.1.230 gitlab.project.com" >> /etc/hosts
+    - unset DOCKER_HOST
     - docker login -u "$CI_REGISTRY_USER" -p $CI_REGISTRY_PASSWORD
   script:
     - cd microservices/auth
