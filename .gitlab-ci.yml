@@ -53,6 +53,8 @@ deliver:
   image:
     name: alpine/helm:letest
     entrypoint: [""]
+  tags:
+    - docker
   before_script:
     - apk add py3-pip
     - pip3 install awscli
