@@ -2,6 +2,7 @@ stages:
 # My pipeline
   - build
   - push
+  - deliver
 
 Build:
   image: docker:latest
@@ -47,7 +48,25 @@ push:
     - if: $CI_COMMIT_BRANCH == "main"
 
   
-
-  
-  
-
+deliver:
+  stage: deliver
+  image:
+    name: alpine/helm:letest
+    entrypoint: [""]
+  before_script:
+    - apk add py3-pip
+    - pip3 install awscli
+    - aws configure set region "us-east-1"
+    - mkdir .tmp/.kube
+    - echo $K8SCONFIG | base64 -d > /tmp/.kube/config
+    - helm add repo bitnami https://charts.bitnami.com/bitnami
+  script:
+    - cd helm/weather/weatherapp-auth
+    - helm dependency build .
+    - helm upgrade --install weatherapp-auth --kubeconfig /tmp/.kube/config -n staging --set mysql.auth.rootPassword=$DB_PASSWORD --set image.tag=$CI_COMMIT_SHA .
+    - cd ../weatherapp-ui
+    - helm upgrade --install --kubeconfig /tmp/.kube/config -n staging weatherapp-ui --set image.tag=$CI_COMMIT_SHA .
+    - cd ../weatherapp-weather
+    - helm upgrade --install --kubeconfig /tmp/.kube/config -n staging weatherapp-weather --set apikey=$API_KEY --set image.tag=$CI_COMMIT_SHA .
+  only: 
+    - main
