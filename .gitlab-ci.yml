@@ -59,9 +59,9 @@ deliver:
     #- apk add py3-pip
     #- pip3 install awscli
     #- aws configure set region "us-east-1"
-    - mkdir /tmp/.kube
-    - echo $K8SCONFIG | base64 -d > /tmp/.kube/config
-    - chmod go-r /tmp/.kube/config
+    - mkdir $HOME/.kube
+    - echo $K8SCONFIG | base64 -d > $HOME/.kube/config
+    - chmod go-r $HOME/.kube/config
     - helm repo add bitnami https://charts.bitnami.com/bitnami
   script:
     - cd helm/weather/weatherapp-auth
