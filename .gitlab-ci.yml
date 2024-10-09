@@ -51,7 +51,7 @@ push:
 deliver:
   stage: deliver
   image:
-    name: alpine/helm:letest
+    name: alpine/helm:latest
     entrypoint: [""]
   tags:
     - docker
