@@ -66,10 +66,10 @@ deliver:
   script:
     - cd helm/weather/weatherapp-auth
     - helm dependency build .
-    - helm upgrade --install weatherapp-auth --kubeconfig /tmp/.kube/config -n staging --set mysql.auth.rootPassword=$DB_PASSWORD --set image.tag=$CI_COMMIT_SHA .
+    - helm upgrade --install weatherapp-auth --kubeconfig $HOME/.kube/config -n staging --set mysql.auth.rootPassword=$DB_PASSWORD --set image.tag=$CI_COMMIT_SHA .
     - cd ../weatherapp-ui
-    - helm upgrade --install --kubeconfig /tmp/.kube/config -n staging weatherapp-ui --set image.tag=$CI_COMMIT_SHA .
+    - helm upgrade --install --kubeconfig $HOME/.kube/config -n staging weatherapp-ui --set image.tag=$CI_COMMIT_SHA .
     - cd ../weatherapp-weather
-    - helm upgrade --install --kubeconfig /tmp/.kube/config -n staging weatherapp-weather --set apikey=$API_KEY --set image.tag=$CI_COMMIT_SHA .
+    - helm upgrade --install --kubeconfig $HOME/.kube/config -n staging weatherapp-weather --set apikey=$API_KEY --set image.tag=$CI_COMMIT_SHA .
   only: 
     - main
