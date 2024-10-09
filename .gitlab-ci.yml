@@ -68,5 +68,5 @@ deliver:
     - helm upgrade --install --kubeconfig /tmp/.kube/config -n staging weatherapp-ui --set image.tag=$CI_COMMIT_SHA .
     - cd ../weatherapp-weather
     - helm upgrade --install --kubeconfig /tmp/.kube/config -n staging weatherapp-weather --set apikey=$API_KEY --set image.tag=$CI_COMMIT_SHA .
-  only: 
-    - main
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_COMMIT_BRANCH == "main"
