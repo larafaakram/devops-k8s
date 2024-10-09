@@ -56,10 +56,10 @@ deliver:
   tags:
     - docker
   before_script:
-    - apk add py3-pip
-    - pip3 install awscli
-    - aws configure set region "us-east-1"
-    - mkdir .tmp/.kube
+    #- apk add py3-pip
+    #- pip3 install awscli
+    #- aws configure set region "us-east-1"
+    - mkdir /tmp/.kube
     - echo $K8SCONFIG | base64 -d > /tmp/.kube/config
     - helm add repo bitnami https://charts.bitnami.com/bitnami
   script:
