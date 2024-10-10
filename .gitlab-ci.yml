@@ -60,7 +60,7 @@ deliver:
     #- pip3 install awscli
     #- aws configure set region "us-east-1"
     - mkdir $HOME/.kube
-    - echo $K8SCONFIG | base64 -d > $HOME/.kube/config
+    - echo $kubeconfig | base64 -d > $HOME/.kube/config
     - chmod go-r $HOME/.kube/config
     - ls -la $HOME/.kube/config
     - cat $HOME/.kube/config
