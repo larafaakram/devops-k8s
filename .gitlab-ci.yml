@@ -45,7 +45,7 @@ push:
     - docker build -t $CI_REGISTRY_USER/weatherapp-weather:$CI_COMMIT_SHA .
     - docker push $CI_REGISTRY_USER/weatherapp-weather:$CI_COMMIT_SHA
   rules:
-    - if: $CI_COMMIT_BRANCH == "prod"
+    - if: $CI_COMMIT_BRANCH == "main"
 
   
 deliver:
@@ -62,11 +62,14 @@ deliver:
     - mkdir $HOME/.kube
     - echo $configkube | base64 -d > $HOME/.kube/config
     - chmod go-r $HOME/.kube/config
-    - ls -la $HOME/.kube/config
-    - cat $HOME/.kube/config
     - helm repo add bitnami https://charts.bitnami.com/bitnami
   script:
     - cd helm/weather/weatherapp-auth
-
+    - helm dependency build .
+    - helm upgrade --install weatherapp-auth --kubeconfig $HOME/.kube/config -n staging --set mysql.auth.rootPassword=$DB_PASSWORD --set image.tag=$CI_COMMIT_SHA .
+    - cd ../weatherapp-ui
+    - helm upgrade --install --kubeconfig $HOME/.kube/config -n staging weatherapp-ui --set image.tag=$CI_COMMIT_SHA .
+    - cd ../weatherapp-weather
+    - helm upgrade --install --kubeconfig $HOME/.kube/config -n staging weatherapp-weather --set apikey=$API_KEY --set image.tag=$CI_COMMIT_SHA .
   only: 
     - main
