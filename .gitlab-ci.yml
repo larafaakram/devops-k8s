@@ -106,6 +106,8 @@ deploy:
   image:
     name: alpine/helm:latest
     entrypoint: [""]
+  tags:
+    - docker
   before_script:
     - mkdir $HOME/.kube
     - echo $configkube | base64 -d > $HOME/.kube/config
