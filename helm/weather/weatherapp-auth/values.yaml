@@ -104,3 +104,5 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+storageClass: my-local-storage

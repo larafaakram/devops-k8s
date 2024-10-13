@@ -1,18 +1,8 @@
 
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: my-local-storage
-provisioner: kubernetes.io/no-provisioner
-reclaimPolicy: Delete
-volumeBindingMode: WaitForFirstConsumer
-
----
-
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: my-lpv-mysql
+  name: mysql-pv-prod
 spec:
   capacity:
     storage: 8Gi
@@ -22,7 +12,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: my-local-storage
   local:
-    path: /share/data
+    path: /share/devops-prod
   nodeAffinity:
     required:
       nodeSelectorTerms:
